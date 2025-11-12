@@ -1,0 +1,1 @@
+savedcmd_/home/krushna/classwork/eldd/practice11/kernlist1.mod := printf '%s\n'   kernlist1.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/practice11/"$$0) }' > /home/krushna/classwork/eldd/practice11/kernlist1.mod
