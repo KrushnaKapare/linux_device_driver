@@ -1,1 +1,0 @@
-savedcmd_/home/krushna/classwork/eldd/demo4/splitfile.mod := printf '%s\n'   file1.o file2.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/demo4/"$$0) }' > /home/krushna/classwork/eldd/demo4/splitfile.mod

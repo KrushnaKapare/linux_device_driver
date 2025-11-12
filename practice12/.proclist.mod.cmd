@@ -1,1 +1,0 @@
-savedcmd_/home/krushna/classwork/eldd/practice12/proclist.mod := printf '%s\n'   proclist.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/practice12/"$$0) }' > /home/krushna/classwork/eldd/practice12/proclist.mod

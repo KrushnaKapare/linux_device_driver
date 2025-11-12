@@ -1,1 +1,0 @@
-savedcmd_/home/krushna/classwork/eldd/practice10/mykfifo.mod := printf '%s\n'   mykfifo.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/practice10/"$$0) }' > /home/krushna/classwork/eldd/practice10/mykfifo.mod

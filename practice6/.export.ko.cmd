@@ -1,1 +1,0 @@
-savedcmd_/home/krushna/classwork/eldd/demo6/export.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/krushna/classwork/eldd/demo6/export.ko /home/krushna/classwork/eldd/demo6/export.o /home/krushna/classwork/eldd/demo6/export.mod.o;  make -f ./arch/x86/Makefile.postlink /home/krushna/classwork/eldd/demo6/export.ko

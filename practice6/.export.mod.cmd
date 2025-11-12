@@ -1,1 +1,0 @@
-savedcmd_/home/krushna/classwork/eldd/demo6/export.mod := printf '%s\n'   export.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/demo6/"$$0) }' > /home/krushna/classwork/eldd/demo6/export.mod
