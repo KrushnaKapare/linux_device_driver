@@ -11,6 +11,8 @@
 *.out
 *.o
 bin/
+Module.symvers
+
 
 # Ignore all parent directories
 #../*
