@@ -1,0 +1,1 @@
+savedcmd_/home/krushna/classwork/eldd/practice13/ktimer.mod := printf '%s\n'   ktimer.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/practice13/"$$0) }' > /home/krushna/classwork/eldd/practice13/ktimer.mod
