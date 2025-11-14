@@ -13,10 +13,10 @@ static dev_t devno;
 static struct class *pclass;
 static struct cdev pchar_cdev;
 
-int pchar_open(struct inode *pinode, struct file *pfile);
-int  pchar_close(struct inode *pinod, struct file *pfile);
-ssize_t pchar_write(struct file *pfile, const char *ubuf, size_t ubufsize, loff_t *poffset);
-ssize_t pchar_read(struct file *pfile, char *ubuf, size_t ubufsize, loff_t *poffset);
+static int pchar_open(struct inode *pinode, struct file *pfile);
+static int  pchar_close(struct inode *pinod, struct file *pfile);
+static ssize_t pchar_write(struct file *pfile, const char *ubuf, size_t ubufsize, loff_t *poffset);
+static ssize_t pchar_read(struct file *pfile, char *ubuf, size_t ubufsize, loff_t *poffset);
 
 static struct file_operations pchar_fops ={
     .open= pchar_open,
@@ -32,7 +32,7 @@ static __init int pchar_init(void)
     pr_info("%s : pchar_init() is called", THIS_MODULE->name);
     
     //-------------- 1 -------------------
-    ret = alloc_chrdev_region(&devno, 0, 1, 0);
+    ret = alloc_chrdev_region(&devno, 0, 1, "pchar");
     if(ret<0)
     {
         pr_err("%s : alloc_chrdev_region(0 is failed",THIS_MODULE->name);
@@ -57,9 +57,9 @@ static __init int pchar_init(void)
         pr_err("%s : device_create() failed\n",THIS_MODULE->name);
         class_destroy(pclass);
         unregister_chrdev_region(devno, 1);
-        return ret;
+        return -1;
     }
-
+    pr_info("%s : device_create() created device file.\n", THIS_MODULE->name);
     //--------------- 4 --------------------
     cdev_init(&pchar_cdev, &pchar_fops);
     
@@ -108,7 +108,7 @@ int  pchar_close(struct inode *pinod, struct file *pfile)
     pr_info("%s : pchar_close() is called\n",THIS_MODULE->name);
     return 0;
 }
-ssize_t pchar_write(struct file *pfile, const char *ubuf, size_t ubufsize, loff_t *poffset)
+ssize_t pchar_write(struct file *pfile, const char __user *ubuf, size_t ubufsize, loff_t *poffset)
 {
         int ret;
         pr_info("%s : pchar_write() is called\n",THIS_MODULE->name);

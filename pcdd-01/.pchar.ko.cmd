@@ -1,0 +1,1 @@
+savedcmd_/home/krushna/classwork/eldd/pcdd-01/pchar.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/krushna/classwork/eldd/pcdd-01/pchar.ko /home/krushna/classwork/eldd/pcdd-01/pchar.o /home/krushna/classwork/eldd/pcdd-01/pchar.mod.o;  make -f ./arch/x86/Makefile.postlink /home/krushna/classwork/eldd/pcdd-01/pchar.ko

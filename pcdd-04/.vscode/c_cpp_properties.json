@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/krushna/linux/linux-6.5.10/include/generated",
+                "/home/krushna/linux/linux-6.5.10/arch/x86/include/generated",
+                "/home/krushna/linux/linux-6.5.10/include",
+                "/home/krushna/linux/linux-6.5.10/arch/x86/include",
+                "/usr/lib/gcc-11/x86_64-linux-gnu/*/include",
+                "/usr/include"
+            ],
+            "defines": [
+                "__KERNEL__",
+                "MODULE",
+                "__GNUC__"
+            ],
+            "compilerPath": "/usr/bin/gcc-11",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+            //"compileCommands": "${workspaceFolder}/hellomod/compile_commands.json"
+        }
+    ],
+    "version": 4
+}
+
