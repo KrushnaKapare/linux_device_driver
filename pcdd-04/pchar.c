@@ -3,7 +3,7 @@
 #include<linux/device.h>
 #include<linux/cdev.h>
 
-// Device
+// Device ==> memory buffer
 #define MAX 32
 static char buffer[MAX];
 static dev_t devno;
@@ -34,7 +34,7 @@ static int __init pchar_init(void)
 
     int ret;
     struct device *pdevice;
-    pr_info("%s : pchar_init() is called\n",THIS_MODULE->name);
+    pr_info("%s : pchar_init() is called.\n",THIS_MODULE->name);
     
     // allocate device number
     ret = alloc_chrdev_region(&devno, 0, 1, "pchar");
