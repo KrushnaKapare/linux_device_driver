@@ -1,7 +1,4 @@
 // Dealing with Multiple device instances
-// Waiting Queue -- When device buffer is full, block the writer process.
-// When data is read from device buffer, wakeup blocked writer process.
-
 #include <linux/module.h>
 #include <linux/kfifo.h>
 #include <linux/fs.h>
@@ -21,9 +18,10 @@ static ssize_t pchar_read(struct file *pfile, char __user *ubuf, size_t ubufsize
 #define MAX 32
 typedef struct pchar_device
 {
-    struct kfifo buffer;     // the device buffer
-    struct cdev cdev;        // cdev struct for the device
-    wait_queue_head_t wr_wq; // to block writer process, when buffer is full.
+    struct kfifo buffer; // the device buffer
+    struct cdev cdev;    // cdev struct for the device
+    wait_queue_head_t wr_wq;
+
 } pchar_device_t;
 
 // number of devices -- flexible via module param
@@ -123,12 +121,12 @@ static int __init pchar_init(void)
     }
 
     // initialize waiting queues
-    for (i = 0; i < devcnt; i++)
+    for (i= 0 ; i< devcnt; i++)
     {
         init_waitqueue_head(&devices[i].wr_wq);
-        pr_info("%s: init_waitqueue_head() initialized waiting queue for pchar%d.\n", THIS_MODULE->name, i);
-    }
+        pr_info("%s : init_waitqueue_head() initialized waiting queue for pchar%d\n",THIS_MODULE->name,i);
 
+    }
     return 0;
 
 kfifo_alloc_failed:
@@ -211,20 +209,18 @@ static ssize_t pchar_write(struct file *pfile, const char __user *ubuf, size_t u
     pchar_device_t *dev = (pchar_device_t *)pfile->private_data;
     int nbytes, ret;
     pr_info("%s: pchar_write() called.\n", THIS_MODULE->name);
-    // if buffer is full, block the writer process
-    // the process will wake up when given cond is true i.e. kfifo is not full
+
     ret = wait_event_interruptible(dev->wr_wq, !kfifo_is_full(&dev->buffer));
-    // process will wakeup when space is avail in buffer due to reading -- ret == 0
-    // process will wakeup due to signal -- ret == ERESTARTSYS
-    if (ret != 0)
+
+    if (ret !=  0)
     {
-        pr_info("%s: process wakeup due to signal.\n", THIS_MODULE->name);
-        return -ERESTARTSYS; // restart the syscall i.e. write()
+        pr_info("%s: process wakeup due to signal\n",THIS_MODULE->name);
+        return -ERESTARTSYS;
     }
     ret = kfifo_from_user(&dev->buffer, ubuf, ubufsize, &nbytes);
-    if (ret < 0)
+    if(ret < 0)
     {
-        pr_err("%s: kfifo_from_user() failed.\n", THIS_MODULE->name);
+        pr_err("%s : kfifo_from_user() failed\n",THIS_MODULE->name);
         return ret;
     }
     return nbytes;
@@ -241,11 +237,10 @@ static ssize_t pchar_read(struct file *pfile, char __user *ubuf, size_t ubufsize
         pr_err("%s: kfifo_to_user() failed.\n", THIS_MODULE->name);
         return ret;
     }
-    // after reading a few bytes, wakeup blocked writer process (if any)
     if (nbytes > 0)
     {
         wake_up_interruptible(&dev->wr_wq);
-        pr_info("%s: the blocked writer process is woken up.\n", THIS_MODULE->name);
+        pr_info("%s: the blockaed writer process is wokenup \n",THIS_MODULE->name);
     }
     return nbytes;
 }

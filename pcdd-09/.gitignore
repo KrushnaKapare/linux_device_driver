@@ -1,0 +1,17 @@
+# Ignore system and IDE files
+*.log
+*.swp
+*.swo
+.cache/
+.config/
+.metadata/
+.DS_Store
+.vscode/
+.idea/
+*.out
+*.o
+bin/
+
+
+# Ignore all parent directories
+#../*
