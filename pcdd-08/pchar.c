@@ -78,34 +78,34 @@ static __init int pchar_init(void)
     }
     pr_info("%s : class_create() created device calss\n",THIS_MODULE->name);
 
-    // create device file
-    for(i = 0; i< devcnt; i++)
+    // create device files
+    for (i = 0; i < devcnt; i++)
     {
         dev_t devnum = MKDEV(major, i);
         pdevice = device_create(pclass, NULL, devnum, NULL, "pchar%d", i);
-        if(IS_ERR(pdevice))
+        if (IS_ERR(pdevice))
         {
             ret = -1;
-            pr_err("%s : device_crate() failed to create device file pchar%d\n", THIS_MODULE->name,i);
+            pr_err("%s: device_create() failed to created device file pchar%d.\n", THIS_MODULE->name, i);
             goto device_create_failed;
         }
-        pr_info("%s : device_create() created device file pchar%d\n",THIS_MODULE->name,i);
-       
+        pr_info("%s: device_create() created device file pchar%d.\n", THIS_MODULE->name, i);
     }
- 
+
     // init cdev for each device and add it in kernel
-    for(i = 0; i < devcnt; i++)
+    for (i = 0; i < devcnt; i++)
     {
         dev_t devnum = MKDEV(major, i);
         cdev_init(&devices[i].cdev, &pchar_fops);
         ret = cdev_add(&devices[i].cdev, devnum, 1);
-        if(ret < 0)
+        if (ret < 0)
         {
-            pr_err("%s : cdev_add() failed for pchar%d\n",THIS_MODULE->name, i);
+            pr_err("%s: cdev_add() failed for pchar%d.\n", THIS_MODULE->name, i);
             goto cdev_add_failed;
         }
-        pr_info("%s : cdev_add() added pchar%d cdev into file\n",THIS_MODULE->name,i);
+        pr_info("%s: cdev_add() added pchar%d cdev in kernel.\n", THIS_MODULE->name, i);
     }
+
 
 
     // alloc device buffers -- kfifos

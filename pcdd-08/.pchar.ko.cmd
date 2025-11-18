@@ -1,0 +1,1 @@
+savedcmd_/home/krushna/classwork/eldd/pcdd-08/pchar.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/krushna/classwork/eldd/pcdd-08/pchar.ko /home/krushna/classwork/eldd/pcdd-08/pchar.o /home/krushna/classwork/eldd/pcdd-08/pchar.mod.o

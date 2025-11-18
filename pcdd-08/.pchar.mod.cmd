@@ -1,0 +1,1 @@
+savedcmd_/home/krushna/classwork/eldd/pcdd-08/pchar.mod := printf '%s\n'   pchar.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/pcdd-08/"$$0) }' > /home/krushna/classwork/eldd/pcdd-08/pchar.mod
