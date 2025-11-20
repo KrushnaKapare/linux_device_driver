@@ -81,10 +81,43 @@ static int __init pchar_init(void)
         pr_err("%s : kfifo_alloc() is failed\n",THIS_MODULE->name);
         goto kfifo_alloc_failed;
     }
-   gpio_req
+   
+    ret = gpio_is_valid(LED_PIN);
+    if(!ret)
+    {
+        ret = -1;
+        pr_err("%s : gpio_is_valid() pin %d is invalid\n",THIS_MODULE->name, LED_PIN);
+        goto gpio_failed;
+    }
+    pr_info("%s : gpio_is_valid() pin %d is valid\n",THIS_MODULE->name,LED_PIN);
+
+    ret = gpio_request(LED_PIN, "bbb-led");
+    if(ret < 0)
+    {
+        pr_err("%s : gpio_request() pin %d is acuirded\n",THIS_MODULE->name, LED_PIN);
+    }
+    pr_info("%s : gpio_request() pin %d is acquired\n", THIS_MODULE->name,LED_PIN);
+
+    led_state = 0;
+    ret = gpio_direction_output(LED_PIN, led_state);
+    if(ret < 0)
+    {
+        pr_err("%s : gpio_direction_output() pin %d direction not set\n",THIS_MODULE->name, LED_PIN);
+        goto gpio_direction_failed;
+    }
+    pr_info("%s : gpio_direction_output() pin %d direction set to output \n", THIS_MODULE->name , LED_PIN);
+
+
+
+
+    
 
 
     return 0;
+gpio_direction_failed:
+    gpio_free(LED_PIN);
+gpio_failed: 
+    kfifo_free(&buffer);
 kfifo_alloc_failed:
     cdev_del(&pchar_cdev);
 cdev_add_failed: 
@@ -103,6 +136,8 @@ static void __exit pchar_exit(void)
 
 
         pr_info("%s : pchar_exit() is called\n",THIS_MODULE->name);
+        gpio_free(LED_PIN);
+        pr_info("%s : gpio_free() released led gpio pin %d\n",THIS_MODULE->name, LED_PIN);
         kfifo_free(&buffer);
         pr_info("%s : kfifo_free() release fifo memory\n",THIS_MODULE->name);
         cdev_del(&pchar_cdev);
@@ -136,35 +171,43 @@ int pchar_close(struct inode *pinode, struct file *pfile)
 ssize_t pchar_write(struct file *pfile, const char __user *ubuf, size_t ubufsize, loff_t *poffset)
 {
     
-    int nbytes , ret;   
+    int  ret;   
     pr_info("%s : pchar_write() called\n",THIS_MODULE->name);
-    
-    if(kfifo_is_full(&buffer))
-        return -ENOSPC;
-    
-    ret = kfifo_from_user(&buffer, ubuf, ubufsize, &nbytes);
-    if(ret <0 )
+   char kbuf[2] = "";
+   pr_info("%s : pchar_write() called\n",THIS_MODULE->name);
+   ret = copy_from_user(kbuf, ubuf, 1);
+   if(ret == 0)
+   if(ret == 0)
+   {
+    if(kbuf[0] == '1')
     {
-        pr_err("%s : kfifo_from_user() failed\n",THIS_MODULE->name);
-        return ret;
+        led_state = 1;
+        gpio_set_value(LED_PIN, led_state);
+        pr_info("%s : pchar_write () -- led pin %d ON\n",THIS_MODULE->name, LED_PIN);
+
     }
-    return nbytes;
+    else
+    {
+        led_state = 0;
+        gpio_set_value(LED_PIN, led_state);
+        pr_info("%s : pchar_write () -- led pin %d OFF\n",THIS_MODULE->name, LED_PIN);
+        
+    }
+   }
+   return ubufsize;
 }
 
 ssize_t pchar_read(struct file *pfile, char __user *ubuf, size_t ubufsize, loff_t *poffset)
 {
-    int nbytes, ret;
+    int  ret;
     pr_info("%s : pchar_read() called\n",THIS_MODULE->name);
-    if(kfifo_is_empty(&buffer))
-        return 0;
-    ret = kfifo_to_user(&buffer, ubuf, ubufsize, &nbytes);
-    if(ret <0 )
-    {
-        pr_err("%s : kfifo_to_user() failed\n",THIS_MODULE->name);
-        return ret;
-    }
-
-    return nbytes;
+    char kbuf[2] = "";
+    if(led_state)
+        strcpy(kbuf, "1");
+    else
+        strcpy(kbuf, "0");
+    ret = copy_to_user(ubuf, kbuf, 2);
+    return 2;
 }
 
 
