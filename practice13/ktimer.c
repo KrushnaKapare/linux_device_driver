@@ -1,6 +1,8 @@
 #include<linux/module.h>
 #include<linux/timer.h>
 
+
+// timer code
 struct timer_list mytimer;
 int ticks;
 int count = 0;
