@@ -1,3 +1,6 @@
+
+// usb driver code without scsi 
+
 #include<linux/module.h>
 #include<linux/usb.h>
 #include<linux/fs.h>
