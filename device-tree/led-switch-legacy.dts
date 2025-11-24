@@ -1,0 +1,33 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "ti,beaglebone", "ti,beaglebone-black";
+
+    fragment@0{
+        target = <&am33xx_pinmux>;
+        __overlay__ {
+            led_switch_pins: pinmux_led_switch_pins{
+                pinctrl-single,pins = <
+                    0x044 0x07  /*gpmc_a1 -> gpio1_17 (GPIO49) */
+                    0x1A4 0x07  /* gpio3_19 (GPIO115) */
+                    >;
+            };
+        };
+    };
+
+    fragment@1 {
+        target-path = "/";
+        __overlay__ {
+            mydev{
+                compatible = "mycompany, led-switch";
+                pinctrl-names = "default";
+                pinctrl-0 = <&led_switch_pins>;
+
+                led-gpio = <&gpio1 17 0>;
+                switch-gpio = <&gpio3 19 0>;
+
+            };
+        };
+    };
+};
