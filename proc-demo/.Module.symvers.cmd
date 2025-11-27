@@ -1,0 +1,1 @@
+savedcmd_/home/krushna/classwork/eldd/proc-demo/Module.symvers :=  scripts/mod/modpost -m -a      -o /home/krushna/classwork/eldd/proc-demo/Module.symvers -T /home/krushna/classwork/eldd/proc-demo/modules.order -i Module.symvers -e 

@@ -1,0 +1,1 @@
+savedcmd_/home/krushna/classwork/eldd/proc-demo/proc-demo.mod := printf '%s\n'   proc-demo.o | awk '!x[$$0]++ { print("/home/krushna/classwork/eldd/proc-demo/"$$0) }' > /home/krushna/classwork/eldd/proc-demo/proc-demo.mod
