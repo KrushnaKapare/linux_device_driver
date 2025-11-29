@@ -14,13 +14,13 @@ static int foo;
 static int __init example_init(void)
 {
     int retval;
-
+	pr_info("%s : example_init() called.\n", THIS_MODULE->name); 
     return 0;
 }
 
 static void __exit example_exit(void)
 {
-
+  pr_info("%s : example_exit() called.\n",THIS_MODULE->name);
 }
 module_init(example_init);
 module_exit(example_exit);
