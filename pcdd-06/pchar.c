@@ -8,6 +8,7 @@
 static struct kfifo buffer;
 static dev_t devno;
 static struct class *pclass;
+static struct cdev pchar_cdev;
 
 int pchar_open(struct inode *pinode, struct file *pfile);
 int pchar_close(struct inode *pinode, struct file *pfile);
@@ -54,7 +55,7 @@ static int __init pchar_init(void)
     }
     pr_info("%s : device_create() created class\n",THIS_MODULE->name);
 
-    cdev_init(&cdev, &pchar_fops);
+    cdev_init(&pchar_cdev, &pchar_fops);
     ret =  cdev_add(&pchar_cdev, devno, 1);
     if( ret < 0)
     {
